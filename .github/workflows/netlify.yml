@@ -1,0 +1,47 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_SOCIAL_GITHUB: ${{ vars.VITE_SOCIAL_GITHUB || secrets.VITE_SOCIAL_GITHUB }}
+          VITE_SOCIAL_LINKEDIN: ${{ vars.VITE_SOCIAL_LINKEDIN || secrets.VITE_SOCIAL_LINKEDIN }}
+          VITE_SOCIAL_INSTAGRAM: ${{ vars.VITE_SOCIAL_INSTAGRAM || secrets.VITE_SOCIAL_INSTAGRAM }}
+          VITE_SOCIAL_FACEBOOK: ${{ vars.VITE_SOCIAL_FACEBOOK || secrets.VITE_SOCIAL_FACEBOOK }}
+          VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL || secrets.VITE_CONTACT_EMAIL }}
+          VITE_CONTACT_PHONE: ${{ vars.VITE_CONTACT_PHONE || secrets.VITE_CONTACT_PHONE }}
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './dist'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: 'Deploy from GitHub Actions'
+          enable-pull-request-comment: false
+          enable-commit-comment: false
+          overwrites-pull-request-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
