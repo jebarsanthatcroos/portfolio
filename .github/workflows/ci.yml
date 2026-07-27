@@ -32,6 +32,9 @@ jobs:
           VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL || secrets.VITE_CONTACT_EMAIL }}
           VITE_CONTACT_PHONE: ${{ vars.VITE_CONTACT_PHONE || secrets.VITE_CONTACT_PHONE }}
 
+      - name: Run tests
+        run: npm run test
+
       - name: Build project
         run: npm run build
         env:

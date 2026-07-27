@@ -1,4 +1,4 @@
-import jebarsanImage from "../assets/jebarsan.png";
+const jebarsanImage = new URL("../assets/jebarsan.png", import.meta.url).href;
 
 export const translations = {
   en: {

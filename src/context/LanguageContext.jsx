@@ -1,5 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
-import { translations, getContent } from "../data/content";
+import { getContent } from "../data/content";
 
 const LanguageContext = createContext(null);
 
